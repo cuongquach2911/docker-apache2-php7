@@ -164,6 +164,8 @@ RUN set -eux; \
 
 COPY docker-php-source /usr/local/bin/
 
+RUN chmod +x /usr/local/bin/docker-php-source
+
 RUN set -eux; \
 	\
 	savedAptMark="$(apt-mark showmanual)"; \
@@ -188,6 +190,7 @@ RUN set -eux; \
 		libsqlite3-dev \
 		libssl-dev \
 		libxml2-dev \
+		libonig-dev \
 		zlib1g-dev \
 		${PHP_EXTRA_BUILD_DEPS:-} \
 	; \
@@ -269,16 +272,17 @@ RUN set -eux; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	\
 # update pecl channel definitions https://github.com/docker-library/php/issues/443
-	pecl update-channels; \
+#	pecl update-channels; \
 	rm -rf /tmp/pear ~/.pearrc; \
 # smoke test
 	php --version
 
 COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
+RUN chmod +x /usr/local/bin/docker-php-ext-*
+
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 RUN docker-php-ext-enable sodium
-
 
 WORKDIR /var/www/html
 
