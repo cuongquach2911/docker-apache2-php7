@@ -238,6 +238,8 @@ RUN set -eux; \
 		--with-libedit \
 		--with-openssl \
 		--with-zlib \
+# enable pear and pecl
+		--with-pear \
 		\
 # bundled pcre does not support JIT on s390x
 # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
@@ -272,7 +274,7 @@ RUN set -eux; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	\
 # update pecl channel definitions https://github.com/docker-library/php/issues/443
-#	pecl update-channels; \
+	pecl update-channels; \
 	rm -rf /tmp/pear ~/.pearrc; \
 # smoke test
 	php --version
